@@ -1,60 +1,42 @@
+<script>
 const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbxVFDUXp4Il62w2f6h6PGXevJFK6gIQzFc-gQj7s3M6v_OAnmuQPxEQrUaSWQJA-1FIQA/exec";
-const DRIVE_FOLDER_URL = "https://drive.google.com/uc?export=download&id=";
-const FILE_POLLING_DELAY = 5000;
 
-const uploadForm = document.getElementById("uploadForm");
-const status = document.getElementById("status");
-const transcriptionBox = document.getElementById("transcription");
-
-uploadForm.addEventListener("submit", async (e) => {
+document.getElementById("uploadForm").addEventListener("submit", async (e) => {
   e.preventDefault();
   const fileInput = document.getElementById("audioFile");
   const file = fileInput.files[0];
-  if (!file) return alert("Selecione um arquivo de áudio");
+  if (!file) return alert("Selecione um áudio.");
 
-  status.textContent = "Enviando arquivo...";
+  document.getElementById("status").textContent = "Enviando arquivo...";
 
   const reader = new FileReader();
-  reader.onload = async function () {
-    const base64Audio = reader.result.split(',')[1];
-
+  reader.onload = async () => {
+    const base64 = reader.result.split(',')[1];
     const form = new FormData();
-    form.append("audio", base64Audio);
-    form.append("filename", file.name);
+    form.append("audio", base64);
+    form.append("filename", file.name);       // 🔥 Aqui é onde o nome é enviado!
     form.append("mimeType", file.type);
 
-    const res = await fetch(WEBAPP_URL, {
-      method: "POST",
-      body: form
-    });
+    try {
+      const res = await fetch(WEBAPP_URL, {
+        method: "POST",
+        body: form,
+      });
 
-    const result = await res.json();
-    if (result.success) {
-      status.textContent = "Áudio enviado. Aguardando transcrição...";
-      pollTranscription(file.name + ".txt");
-    } else {
-      status.textContent = "Erro: " + result.error;
+      const json = await res.json();
+      if (json.success) {
+        document.getElementById("status").textContent = "Áudio enviado com sucesso!";
+      } else {
+        document.getElementById("status").textContent = "Erro: " + json.error;
+      }
+    } catch (error) {
+      console.error("Erro ao enviar:", error);
+      document.getElementById("status").textContent = "Erro na comunicação com o servidor.";
     }
   };
+
   reader.readAsDataURL(file);
 });
+</script>
 
-async function pollTranscription(txtFilename) {
-  const url = `${WEBAPP_URL}?filename=${encodeURIComponent(txtFilename)}`;
-
-  const interval = setInterval(async () => {
-    try {
-      const res = await fetch(url);
-      const data = await res.json();
-
-      if (data.success) {
-        clearInterval(interval);
-        transcriptionBox.value = data.content;
-        status.textContent = "Transcrição pronta!";
-      }
-    } catch (e) {
-      status.textContent = "Erro ao buscar transcrição.";
-    }
-  }, FILE_POLLING_DELAY);
-}
 
