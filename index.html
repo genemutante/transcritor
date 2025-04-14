@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Whisper Transcrição</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Transcrição de Áudio</h1>
+    <form id="uploadForm">
+      <input type="file" id="audioFile" accept="audio/*" required />
+      <button type="submit">Enviar</button>
+    </form>
+    <p id="status">Aguardando envio...</p>
+    <textarea id="transcription" readonly placeholder="A transcrição aparecerá aqui..."></textarea>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
