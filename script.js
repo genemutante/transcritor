@@ -41,7 +41,7 @@ uploadForm.addEventListener("submit", async (e) => {
 
 async function pollTranscription(txtFilename) {
   const folderId = "1KauFKBNej9b1Zw08U1PgyKqNpa-5SBWw";
-  const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+name='${txtFilename}'&key=SUA_API_KEY`;
+  const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+name='${txtFilename}'&key=AKfycbzFqXnNMR6Ce38dwAD2_kwkACR7vZB30nXlKuPE9wUbKqpnRmUnou9olxlPyMFU4V17Bw`;
   
   const interval = setInterval(async () => {
     const res = await fetch(url);
