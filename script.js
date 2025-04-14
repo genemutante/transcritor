@@ -40,18 +40,21 @@ uploadForm.addEventListener("submit", async (e) => {
 });
 
 async function pollTranscription(txtFilename) {
-  const folderId = "1KauFKBNej9b1Zw08U1PgyKqNpa-5SBWw";
-  const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+name='${txtFilename}'&key=AKfycbzFqXnNMR6Ce38dwAD2_kwkACR7vZB30nXlKuPE9wUbKqpnRmUnou9olxlPyMFU4V17Bw`;
-  
+  const url = `${WEBAPP_URL}?filename=${encodeURIComponent(txtFilename)}`;
+
   const interval = setInterval(async () => {
-    const res = await fetch(url);
-    const data = await res.json();
-    if (data.files && data.files.length > 0) {
-      clearInterval(interval);
-      const fileId = data.files[0].id;
-      const content = await fetch(`${DRIVE_FOLDER_URL}${fileId}`).then(r => r.text());
-      transcriptionBox.value = content;
-      status.textContent = "Transcrição pronta!";
+    try {
+      const res = await fetch(url);
+      const data = await res.json();
+
+      if (data.success) {
+        clearInterval(interval);
+        transcriptionBox.value = data.content;
+        status.textContent = "Transcrição pronta!";
+      }
+    } catch (e) {
+      status.textContent = "Erro ao buscar transcrição.";
     }
   }, FILE_POLLING_DELAY);
 }
+
