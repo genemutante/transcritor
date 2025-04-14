@@ -1,4 +1,4 @@
-const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbxhI78wMjCh7kcUPPg_PhtWpt-vU-gSXCYqacQEP2WmaSMheo4HKa9fybLMl7R_ejz0oQ/exec";
+const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbxVFDUXp4Il62w2f6h6PGXevJFK6gIQzFc-gQj7s3M6v_OAnmuQPxEQrUaSWQJA-1FIQA/exec";
 const DRIVE_FOLDER_URL = "https://drive.google.com/uc?export=download&id=";
 const FILE_POLLING_DELAY = 5000;
 
